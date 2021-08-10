@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Mediapipe Self Segmentation</title>
     <meta charset="utf-8">
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
@@ -10,13 +9,12 @@
 </head>
 
 <body>
-    <div class="container">
-        <video class="input_video"></video>
-        <canvas class="output_canvas" width="1280px" height="720px"></canvas>
-    </div>
-    <div class="control-panel">
-    </div>
+<div class="container">
+    <video class="input_video"></video>
+    <canvas class="output_canvas" width="1280px" height="720px"></canvas>
+</div>
 </body>
+
 
 <script type="module">
     const videoElement = document.getElementsByClassName('input_video')[0];
@@ -24,43 +22,23 @@
     const canvasElement = document.getElementsByClassName('output_canvas')[0];
     const canvasCtx = canvasElement.getContext('2d');
 
-    var img = new Image();   // Create new img element
-    img.addEventListener('load', function() {
-        // execute drawImage statements here
-    }, false);
-    img.src = 'galaxy.jpg'; // Set source path
-
-
     function onResults(results) {
         canvasCtx.save();
         canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
         canvasCtx.drawImage(results.segmentationMask, 0, 0,
             canvasElement.width, canvasElement.height);
 
-        // Default config
-        // canvasCtx.globalCompositeOperation = 'source-in';
-        // canvasCtx.fillStyle = "rgba(255, 255, 255, 0.5)";
-        // canvasCtx.fillRect(0, 0, canvasElement.width, canvasElement.height);
-        // canvasCtx.globalCompositeOperation = 'destination-atop';
-        // canvasCtx.drawImage(
-        //     results.image, 0, 0, canvasElement.width, canvasElement.height);
-        // canvasCtx.restore();
-
-
+        // Only overwrite existing pixels.
         canvasCtx.globalCompositeOperation = 'source-in';
-
-        canvasCtx.drawImage(
-            results.image, 0, 0, canvasElement.width, canvasElement.height);
+        canvasCtx.fillStyle = '#00FF00';
+        canvasCtx.fillRect(0, 0, canvasElement.width, canvasElement.height);
 
         // Only overwrite missing pixels.
         canvasCtx.globalCompositeOperation = 'destination-atop';
+        canvasCtx.drawImage(
+            results.image, 0, 0, canvasElement.width, canvasElement.height);
 
-        canvasCtx.drawImage(img, 0, 0)
-
-        // canvasCtx.fillStyle = '#0000FF';
-        // canvasCtx.fillRect(0, 0, canvasElement.width, canvasElement.height);
-
-
+        canvasCtx.restore();
     }
 
     const selfieSegmentation = new SelfieSegmentation({locateFile: (file) => {
@@ -68,7 +46,6 @@
         }});
     selfieSegmentation.setOptions({
         modelSelection: 1,
-        effect: 'background',
     });
     selfieSegmentation.onResults(onResults);
 
