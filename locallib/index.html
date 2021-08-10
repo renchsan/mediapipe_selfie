@@ -2,6 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
+    <title>Mediapipe Self Segmentation - Local Libraries</title>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
@@ -16,7 +17,8 @@
 <body>
     <div class="container">
         <video class="input_video"></video>
-        <canvas class="output_canvas" width="1280px" height="720px"></canvas>
+<!--        <canvas class="output_canvas" width="1280px" height="720px"></canvas>-->
+        <canvas class="output_canvas" width="720px" height="1080px"></canvas>
     </div>
     <div class="control-panel">
     </div>
@@ -28,11 +30,9 @@
     const canvasElement = document.getElementsByClassName('output_canvas')[0];
     const canvasCtx = canvasElement.getContext('2d');
 
-    var img = new Image();   // Create new img element
-    img.addEventListener('load', function() {
-        // execute drawImage statements here
-    }, false);
-    img.src = 'galaxy.jpg'; // Set source path
+    var img = new Image();
+    img.src = 'photos/galaxy.jpg';
+    // img.src = 'photos/selfie_1_2.jpg';
 
 
     function onResults(results) {
@@ -80,8 +80,8 @@
         onFrame: async () => {
             await selfieSegmentation.send({image: videoElement});
         },
-        width: 1280,
-        height: 720
+        width: 720,
+        height: 1080
     });
     camera.start();
 </script>
